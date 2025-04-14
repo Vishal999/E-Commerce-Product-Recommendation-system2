@@ -1,0 +1,33 @@
+ecommerce-recommendation/
+│
+├── backend/
+│   ├── app/
+│   │   ├── main.py                # FastAPI entry point
+│   │   ├── models/                # ML model loading and prediction logic
+│   │   ├── routes/                # API routes for recommendations
+│   │   └── utils/                 # Preprocessing & helper functions
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── tailwind.config.js
+│   └── package.json
+│
+├── ml_models/
+│   ├── collaborative_model.pkl
+│   ├── content_based_model.pkl
+│   └── training_notebooks/
+│       └── train_models.ipynb
+│
+├── data/
+│   ├── products.csv
+│   └── user_interactions.csv
+│
+├── README.md
+└── docker-compose.yml
