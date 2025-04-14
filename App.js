@@ -1,3 +1,4 @@
+
 ### frontend/src/App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
@@ -5,11 +6,21 @@ import './App.css';
 function App() {
   const [userId, setUserId] = useState('user1');
   const [recommendations, setRecommendations] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [similarProducts, setSimilarProducts] = useState([]);
 
   const fetchRecommendations = async () => {
     const res = await fetch(`http://localhost:8000/recommend/user/${userId}`);
     const data = await res.json();
     setRecommendations(data.recommendations || []);
+    setSelectedProduct(null);
+    setSimilarProducts([]);
+  };
+
+  const fetchSimilarProducts = async (productId) => {
+    const res = await fetch(`http://localhost:8000/recommend/product/${productId}`);
+    const data = await res.json();
+    setSimilarProducts(data.similar_products || []);
   };
 
   useEffect(() => {
@@ -34,14 +45,36 @@ function App() {
         Get Recommendations
       </button>
 
+      <h2 className="text-xl font-semibold mb-2">Recommended Products:</h2>
       <ul>
         {recommendations.map((item, idx) => (
-          <li key={idx} className="border p-2 mb-2 rounded shadow">
-            <h2 className="font-semibold">{item.name}</h2>
+          <li
+            key={idx}
+            className="border p-2 mb-2 rounded shadow cursor-pointer hover:bg-gray-100"
+            onClick={() => {
+              setSelectedProduct(item);
+              fetchSimilarProducts(item.product_id);
+            }}
+          >
+            <h3 className="font-semibold">{item.name}</h3>
             <p>{item.description}</p>
           </li>
         ))}
       </ul>
+
+      {selectedProduct && (
+        <div className="mt-6">
+          <h2 className="text-xl font-bold mb-2">Similar to: {selectedProduct.name}</h2>
+          <ul>
+            {similarProducts.map((item, idx) => (
+              <li key={idx} className="border p-2 mb-2 rounded shadow">
+                <h3 className="font-semibold">{item.name}</h3>
+                <p>{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
